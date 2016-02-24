@@ -1,0 +1,75 @@
+---
+- hosts: all
+  become: true
+  vars:
+    - audit_logs:
+        - '/var/log/audit/audit.log'
+        - '/var/log/wtmp'
+        - '/var/log/lastlog'
+  tasks:
+    - name: adding VMware repo keys
+      apt_key:
+        url: "{{ item }}"
+        state: present
+      with_items:
+        - 'http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-DSA-KEY.pub'
+        - 'http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub'
+      when: ansible_os_family == "Debian"
+
+    - name: adding VMware repository
+      apt_repository:
+        repo: "deb http://packages.vmware.com/packages/ubuntu {{ ansible_distribution_release }} main"
+        state: present
+      register: repo_added
+      when: >
+            ansible_distribution == "Ubuntu" and
+            (ansible_distribution_release == "precise" or
+            ansible_distribution_release == "trusty")
+
+    - name: updating apt-cache
+      apt:
+        update_cache: true
+      when: >
+            ansible_distribution == "Ubuntu" and
+            repo_added.changed
+
+    - name: installing open-vm-tools-deploypkg
+      apt:
+        name: "open-vm-tools-deploypkg"
+        state: present
+      when: >
+            ansible_distribution == "Ubuntu" and
+            (ansible_distribution_release == "precise" or
+            ansible_distribution_release == "trusty")
+
+    - name: installing open-vm-tools
+      apt:
+        name: "open-vm-tools"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: stopping rsyslog service
+      service:
+        name: "rsyslog"
+        state: stopped
+      when: ansible_os_family == "Debian"
+
+    - name: clearing audit logs
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items: audit_logs
+
+    - name: cleaning up udev rules
+      file:
+        path: "/etc/udev/rules.d/70-persistent-net.rules"
+        state: absent
+
+    - name: cleaning up tmp directories
+      command: "rm -rf {{ item }}"
+      with_items:
+        - '/tmp/*'
+        - '/var/tmp/*'
+
+    - name: cleaning up ssh keys
+      command: "rm -f /etc/ssh/ssh_host_*"

@@ -40,7 +40,7 @@ rm -rf /tmp/*
 rm -rf /var/tmp/*
 
 #cleanup current ssh keys
-rm /etc/ssh/ssh_host_*
+rm -f /etc/ssh/ssh_host_*
 
 #add check for ssh keys on reboot...regenerate if neccessary
 sed -i -e 's|exit 0||' /etc/rc.local

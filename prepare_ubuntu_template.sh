@@ -17,16 +17,23 @@ apt-get update
 apt-get install -y open-vm-tools-deploypkg open-vm-tools
 
 #Stop services for cleanup
-service auditd stop
 service rsyslog stop
 
 #clear audit logs
-cat /dev/null > /var/log/audit/audit.log
-cat /dev/null > /var/log/wtmp
-cat /dev/null > /var/log/lastlog
+if [ -f /var/log/audit/audit.log ]; then
+    cat /dev/null > /var/log/audit/audit.log
+fi
+if [ -f /var/log/wtmp ]; then
+    cat /dev/null > /var/log/wtmp
+fi
+if [ -f /var/log/lastlog ]; then
+    cat /dev/null > /var/log/lastlog
+fi
 
 #cleanup persistent udev rules
-rm /etc/udev/rules.d/70-persistent-net.rules
+if [ -f /etc/udev/rules.d/70-persistent-net.rules ]; then
+    rm /etc/udev/rules.d/70-persistent-net.rules
+fi
 
 #cleanup /tmp directories
 rm -rf /tmp/*

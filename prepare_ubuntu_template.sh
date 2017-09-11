@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Add usernames to add to /etc/sudoers for passwordless sudo
-users=("ubuntu")
+users=("ubuntu" "admin")
 
 for user in "${users[@]}"
 do
-  cat /etc/sudoers | grep $user
+  cat /etc/sudoers | grep ^$user
   RC=$?
   if [ $RC != 0 ]; then
-    bash -c "echo \"$username ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
+    bash -c "echo \"$user ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
   fi
 done
 

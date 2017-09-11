@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Add username to add to /etc/sudoers for passwordless sudo
-$username="ubuntu"
+username="ubuntu"
 
 bash sh -c "echo \"$username ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
 

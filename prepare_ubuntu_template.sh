@@ -1,9 +1,16 @@
 #!/bin/bash
 
-# Add username to add to /etc/sudoers for passwordless sudo
-username="ubuntu"
+# Add usernames to add to /etc/sudoers for passwordless sudo
+users=("ubuntu" "admin")
 
-bash -c "echo \"$username ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+for user in "${users[@]}"
+do
+  cat /etc/sudoers | grep $user
+  RC=$?
+  if [ $RC != 0 ]; then
+    bash -c "echo \"$username ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+  fi
+done
 
 #add VMware package keys
 # wget http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-DSA-KEY.pub -O - | apt-key add -

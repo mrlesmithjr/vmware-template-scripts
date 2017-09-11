@@ -8,7 +8,7 @@ do
   cat /etc/sudoers | grep $user
   RC=$?
   if [ $RC != 0 ]; then
-    bash -c "echo \"$username ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+    bash -c "echo \"$username ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
   fi
 done
 

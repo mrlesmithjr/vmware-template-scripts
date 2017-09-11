@@ -14,7 +14,7 @@ echo "deb http://packages.vmware.com/packages/ubuntu $codename main" > /etc/apt/
 apt-get update
 
 #install packages
-apt-get install -y open-vm-tools-deploypkg open-vm-tools
+apt-get install -y open-vm-tools
 
 #Stop services for cleanup
 service rsyslog stop

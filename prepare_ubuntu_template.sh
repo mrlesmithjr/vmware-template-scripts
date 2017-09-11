@@ -1,20 +1,21 @@
 #!/bin/bash
 
 #add VMware package keys
-wget http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-DSA-KEY.pub -O - | apt-key add -
-wget http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub -O - | apt-key add -
+# wget http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-DSA-KEY.pub -O - | apt-key add -
+# wget http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub -O - | apt-key add -
 
 #grab Ubuntu Codename
 codename="$(lsb_release -c | awk {'print $2}')"
 
 #add VMware repository to install open-vm-tools-deploypkg
-echo "deb http://packages.vmware.com/packages/ubuntu $codename main" > /etc/apt/sources.list.d/vmware-tools.list
+# echo "deb http://packages.vmware.com/packages/ubuntu $codename main" > /etc/apt/sources.list.d/vmware-tools.list
 
 #update apt-cache
 apt-get update
 
 #install packages
-apt-get install -y open-vm-tools
+# apt-get install -y open-vm-tools
+apt-get install -y python-minimal
 
 #Stop services for cleanup
 service rsyslog stop
